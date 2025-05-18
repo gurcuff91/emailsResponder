@@ -1,6 +1,6 @@
 # Small Email-Autoresponder
 
-**Small Email-Autoresponder** is a lightweight demo application built with **Node.js** and **KaibanJS**. It simulates an email autoresponder that classifies email content and automatically generates replies based on sentiment, intent, and area.
+**Small Email-Autoresponder** is a lightweight demo webapp built with **Node.js** , **Express** and **KaibanJS**. It simulates an email autoresponder that classifies email content and automatically generates replies based on sentiment, intent, and area.
 
 ---
 
@@ -20,6 +20,9 @@
 
 - Node.js
 - KaibanJS
+- Express
+- EJS
+- Htmx
 
 ---
 
@@ -54,14 +57,15 @@ cp .env.template .env
 
 ```
 OPENAI_API_KEY=<your_openai_api_key_here>
+PORT=<your_webapp_port_here>
 ```
 
 ---
 
-## 🏃 Running the App
+## 🏃 Running the WebApp
 
 ```bash
-node app.js
+npm start
 ```
 
-This will execute the demo logic and simulate classification and auto-reply using samples emails.
+This will execute a webapp on: `http://locahost:PORT`.
