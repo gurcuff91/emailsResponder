@@ -15,13 +15,31 @@
     <div class="container mt-3">
         <div class="row">
             <div class="col">
-                Sentiment: <%= categorization.sentiment %>
+                <b>Sentiment:</b>
+                <% if (categorization.sentiment==='Positive' ) { %>
+                    <span class="badge bg-success">
+                        <%= categorization.sentiment %>
+                    </span>
+                    <% } else if (categorization.sentiment==='Negative' ) { %>
+                        <span class="badge bg-danger">
+                            <%= categorization.sentiment %>
+                        </span>
+                        <% } else { %>
+                            <span class="badge bg-secondary">
+                                <%= categorization.sentiment %>
+                            </span>
+                            <% } %>
+
             </div>
             <div class="col">
-                Intent: <%= categorization.intent %>
+                <b>Intent:</b> <span class="badge bg-primary">
+                    <%= categorization.intent %>
+                </span>
             </div>
             <div class="col">
-                Area: <%= categorization.area %>
+                <b>Area:</b> <span class="badge bg-primary">
+                    <%= categorization.area %>
+                </span>
             </div>
         </div>
     </div>
