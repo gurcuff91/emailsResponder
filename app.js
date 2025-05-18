@@ -1,52 +1,39 @@
-import { emailReplyTeam } from './lib/emailsResponder.js';
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 
-// Crea eamil processor function
-// This function will be used to process the emails and generate the reports
-async function emailProcessor(input) {
-    const result = await emailReplyTeam.start(input);
-    if (result.status === 'FINISHED') {
-        return JSON.parse(result.result)
-    } else if (result.status === 'BLOCKED') {
-        console.log('Workflow is blocked, unable to complete');
-    }
-}
+var indexRouter = require('./routes/index');
 
-// Test the email processor function with some sample emails
-[
-    {
-        subject: "Feedback on New Feature",
-        body: "Hi Team,\nI love the new feature! It has made my work so much easier.\n\nBest,\nJohn"
-    },
-    {
-        subject: "Bug Report: App Crash",
-        body: "Hello,\nThe app crashes when I try to open it. Please fix this ASAP.\n\nThanks,\nSarah"
-    },
-    {
-        subject: "Inquiry about Subscription Plans",
-        body: "Hi,\nCan you provide more details about your subscription plans? I'm interested in upgrading.\n\nRegards,\nMike"
-    }
-].forEach((email) => {
-    emailProcessor(email).then((res) => {
-        console.log('-------------------------');
-        console.log('-- Processing Email... --');
-        console.log('-------------------------');
-        console.log(`Subject: ${email.subject}`);
-        console.log(`Body: ${email.body}`);
-        console.log('--------------------------------');
-        if (res === undefined) {
-            console.log('No response from email processor');
-            return;
-        }
-        console.log('Email processed successfully:');
-        console.log('--------------------------------');
-        console.log('Categorization:', res.categorization);
-        console.log('Reply:', res.reply);
-        console.log('****************************************************');
-    }
-    ).catch((err) => {
-        console.log('Error processing email');
-        console.log(err);
-        console.log('****************************************************');
-    });
-})
+var app = express();
 
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+
+app.use('/', indexRouter);
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
+});
+
+// error handler
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+module.exports = app;
