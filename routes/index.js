@@ -6,13 +6,15 @@ const router = express.Router();
 
 /* GET home page. */
 router.get('/', async (req, res) => {
-  const authRedirectUrl = `${req.protocol}://${req.hostname}/auth/callback`;
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.headers.host || 'localhost';
+  const authRedirectUrl = `${protocol}://${host}/auth/callback`;
   const client = getClient(authRedirectUrl);
   const authenticated = isAuthenticated();
   const authUrl = getAuthUrl(client);
 
   console.log('AUTH-REDIRECT-URL:', authRedirectUrl);
-  console.log('REQ:', req);
+  console.log('REQ-HEADERS:', req.headers);
 
   res.render('index', { authenticated, authUrl });
 });
