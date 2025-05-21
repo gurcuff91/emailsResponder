@@ -2,6 +2,7 @@
   "name": "emails-responder",
   "version": "1.0.0",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "start": "node ./bin/www"
   },
@@ -15,8 +16,12 @@
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "googleapis": "^148.0.0",
     "http-errors": "~1.6.3",
+    "imap-simple": "^5.1.0",
     "kaibanjs": "^0.20.1",
-    "morgan": "~1.9.1"
+    "mailparser": "^3.7.2",
+    "morgan": "~1.9.1",
+    "nodemailer": "^7.0.3"
   }
 }

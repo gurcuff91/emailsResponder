@@ -1,23 +1,25 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+import createError from 'http-errors';
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import authRouter from './routes/auth.js';
+import indexRouter from './routes/index.js';
 
-var indexRouter = require('./routes/index');
+const app = express();
 
-var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
+// view engine
+app.set('views', path.join(process.cwd(), 'views'));
 app.set('view engine', 'ejs');
 
+// middleware
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-
+// routes
+app.use('/auth', authRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
@@ -36,4 +38,4 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+export default app;

@@ -27,31 +27,75 @@
         automatically generates replies based on sentiment, intent, and area.
       </p>
 
-      <form class="mt-5" hx-post="/process-email" hx-target="#result" hx-on::after-on-load="this.reset()"
-        hx-indicator="#indicator">
-        <div class="mb-3">
-          <label for="exampleFormControlInput1" class="form-label">
-            Email subject:
-          </label>
-          <input type="text" name="subject" class="form-control" id="exampleFormControlInput1" placeholder="" required>
-        </div>
-        <div class="mb-3">
-          <label for="exampleFormControlTextarea1" class="form-label">
-            Email body:
-          </label>
-          <textarea name="body" class="form-control" id="exampleFormControlTextarea1" rows="6" required></textarea>
-        </div>
-        <button class="btn btn-primary" type="submit" hx-disabled-elt="this">
-          <i class="bi bi-envelope-arrow-up-fill"></i>
-          Process
-          <span id="indicator" class="htmx-indicator spinner-border spinner-border-sm" role="status"
-            aria-hidden="true"></span>
+      <h4 class="mt-5">Gmail</h4>
+      <% if (!authenticated) { %>
+        <p>
+          Click the button below to connect to your Gmail account.
+        </p>
+        <button class="btn btn-success" onclick="window.open('<%= authUrl %>', '_blank')">
+          <i class="bi bi-google"></i>
+          Pair
         </button>
-      </form>
+        <% } else { %>
+          <p>
+            You are already connected to your Gmail account.<br>
+            - Use <b>Unpair</b> to disconnect your account.<br>
+            - Use <b>Respond</b> to respond to the last one unreaded email into your inbox.
+          </p>
 
-      <div class="mt-5" id="result"></div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-danger" onclick="fetch('/auth/revoke').then(() => window.location.reload())">
+              <i class="bi bi-google"></i>
+              Unpair
+            </button>
+            <button class="btn btn-success" hx-get="/autorespond-email" hx-indicator="#respond-indicator"
+              hx-disable-elt="this">
+              <i class="bi bi-send"></i>
+              Respond
+              <span id="respond-indicator" class="htmx-indicator spinner-border spinner-border-sm" role="status"
+                aria-hidden="true"></span>
+            </button>
+          </div>
+          <% } %>
 
-  </div>
+            <div class="mt-5">
+              <h4>Email</h4>
+              <p>
+                Respond to an email and classify it by Sentiment, Intent and Area.
+              </p>
+              <form hx-post="/process-email" hx-target="#result" hx-on::after-on-load="this.reset()"
+                hx-indicator="#process-indicator" hx-disable-elt="#submit">
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label">
+                    Email subject:
+                  </label>
+                  <input type="text" name="subject" class="form-control" id="exampleFormControlInput1" placeholder=""
+                    required>
+                </div>
+                <div class="mb-3">
+                  <label for="exampleFormControlTextarea1" class="form-label">
+                    Email body:
+                  </label>
+                  <textarea name="body" class="form-control" id="exampleFormControlTextarea1" rows="6"
+                    required></textarea>
+                </div>
+                <button id="submit" class="btn btn-primary" type="submit">
+                  <i class="bi bi-play"></i>
+                  Process
+                  <span id="process-indicator" class="htmx-indicator spinner-border spinner-border-sm" role="status"
+                    aria-hidden="true"></span>
+                </button>
+              </form>
+
+              <div class="mt-5" id="result"></div>
+            </div>
 </body>
+
+<script>
+  // function openAuthUrl() {
+  //   window.open('https://chatgpt.com/', '_blank');
+  //   window.open(<%= authUrl %>, '_blank');
+  // }
+</script>
 
 </html>
