@@ -11,13 +11,8 @@ router.get('/', async (req, res) => {
   const authenticated = isAuthenticated();
   const authUrl = getAuthUrl(client);
 
-  // TODO start responder workflow here
-  // if (authenticated) {
-  //   const autoResponderTeam = await createAutoresponderTeam();
-  //   autoResponderTeam.start().then(result => {
-  //     console.log('RESULT:', JSON.parse(result.result));
-  //   })
-  // }
+  console.log('AUTH-REDIRECT-URL:', authRedirectUrl);
+  console.log('REQ:', req);
 
   res.render('index', { authenticated, authUrl });
 });
