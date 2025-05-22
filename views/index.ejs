@@ -44,7 +44,7 @@
           </p>
 
           <div class="d-flex gap-2">
-            <button class="btn btn-danger" onclick="fetch('/auth/revoke').then(() => window.location.reload())">
+            <button class="btn btn-danger" onclick="fetch('/revoke').then(() => window.location.reload())">
               <i class="bi bi-google"></i>
               Unpair
             </button>
@@ -90,12 +90,5 @@
               <div class="mt-5" id="result"></div>
             </div>
 </body>
-
-<script>
-  // function openAuthUrl() {
-  //   window.open('https://chatgpt.com/', '_blank');
-  //   window.open(<%= authUrl %>, '_blank');
-  // }
-</script>
 
 </html>

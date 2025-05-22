@@ -139,4 +139,4 @@ dist
 .DS_Store
 
 # Google auth
-google/token.json
+token.json

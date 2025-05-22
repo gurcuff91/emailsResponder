@@ -3,8 +3,10 @@ import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import authRouter from './routes/auth.js';
 import indexRouter from './routes/index.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
@@ -19,7 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // routes
-app.use('/auth', authRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

@@ -1,22 +1,28 @@
 import express from 'express';
 import responderTeam from '../lib/responderTeam.js';
 import { createAutoresponderTeam } from '../lib/autoresponderTeam.js';
-import { getClient, getAuthUrl, isAuthenticated } from '../lib/oauth.js';
+import { getClient, getAuthUrl, isAuthenticated, createToken, revokeToken } from '../lib/oauth.js';
 const router = express.Router();
 
 /* GET home page. */
 router.get('/', async (req, res) => {
-  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
-  const host = req.headers.host || 'localhost';
-  const authRedirectUrl = `${protocol}://${host}/auth/callback`;
-  const client = getClient(authRedirectUrl);
-  const authenticated = isAuthenticated();
-  const authUrl = getAuthUrl(client);
+  var authenticated = isAuthenticated();
 
-  console.log('AUTH-REDIRECT-URL:', authRedirectUrl);
-  console.log('REQ-HEADERS:', req.headers);
+  if (!authenticated) {
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    const host = req.hostname || 'localhost';
+    const authRedirectUrl = `${protocol}://${host}`;
+    const client = getClient(authRedirectUrl);
+    const authUrl = getAuthUrl(client);
 
-  res.render('index', { authenticated, authUrl });
+    if (req.query.code) {
+      await createToken(client, req.query.code);
+      authenticated = isAuthenticated();
+      return res.redirect(301, '/');
+    }
+    return res.render('index', { authenticated, authUrl });
+  }
+  res.render('index', { authenticated });
 });
 
 // Process email endpoint
@@ -38,5 +44,10 @@ router.get('/autorespond-email', async (req, res) => {
   console.log('AUTORESPOND-RESULT:', result.result);
   res.sendStatus(204)
 })
+
+router.get('/revoke', (req, res) => {
+  revokeToken();
+  res.sendStatus(200);
+});
 
 export default router;
